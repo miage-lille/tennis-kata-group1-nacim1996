@@ -4,17 +4,26 @@ type player =
   | Player_two
 
 (* Surely not the best choice *)
-type point = int
+type point =
+  | Love
+  | Fifteen
+  | Thirty
+  | Forty
 
 type points_data =
   { player_one : point
   ; player_two : point
   }
-
+  type forty_data = {
+    player: player (* The player who have forty points *)
+    ;other_point: point (* Points of the other player *)
+  }
 (* Surely incomplete *)
 type score =
   | Points of points_data
+  | Forty of forty_data
   | Deuce
+  | Advantage of player
   | Game of player
 
 (* TOOLING FUNCTIONS *)
@@ -47,9 +56,9 @@ let string_of_score : score -> string =
 let increment_point : point -> point option =
  fun point ->
   match point with
-  | 0 -> Some 15
-  | 15 -> Some 30
-  | 30 -> Some 40
+  | Love -> Some Fifteen
+  | Fifteen -> Some Thirty
+  | Thirty -> Some Forty
   | _ -> None
 
 
@@ -58,7 +67,7 @@ let read_from_option_point : point option -> point =
  fun optinal_point ->
   match optinal_point with
   | Some a -> a
-  | None -> 0
+  | None -> Love
 
 
 (* TRANSITION FUNCTIONS *)
